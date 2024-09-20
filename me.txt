@@ -6,3 +6,10 @@ Another ref: switch html data-theme
 https://jsfiddle.net/gc9m8pea/2/
 
 Note: the beauty of this is that there is no need to write "dark:m-2" like css anymore!!
+
+
+Main git source:
+https://github.com/gitdagray/react_jwt_auth
+David Gray video: https://www.youtube.com/watch?v=nI8PYZNFtac
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

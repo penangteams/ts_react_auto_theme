@@ -7,11 +7,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import ThemeButton from "./ThemeButton";
 // const sampleData = new Array(7).fill("item name");
 const menuItems = ["Contact", "About"];
+import useAuth from "../hooks/useAuth";
 
 const NavbarM = () => {
   const [open, setOpen] = React.useState(false);
   const drop = React.useRef(null);
   const navigate = useNavigate();
+  const { auth, setAuth } = useAuth();
   function handleClick(e) {
     if (!e.target.closest(`.${drop.current.className}`) && open) {
       setOpen(false);
@@ -23,6 +25,12 @@ const NavbarM = () => {
       document.removeEventListener("click", handleClick);
     };
   });
+  const logout = async () => {
+    // if used in more components, this should be in context
+    // axios to /logout endpoint
+    setAuth({});
+    navigate("/");
+  };
   return (
     <header className="flex shadow-lg py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
       <div className="flex flex-wrap items-center justify-between gap-4 w-full">
@@ -81,23 +89,23 @@ const NavbarM = () => {
             </li>
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <NavLink
-                to="/"
+                to="/contact"
                 className="hover:text-[#007bff] text-[#333] block font-semibold text-[15px]"
               >
-                Team
+                Contact
               </NavLink>
             </li>
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <NavLink
-                to="/"
+                to="/admin"
                 className="hover:text-[#007bff] text-[#333] block font-semibold text-[15px]"
               >
-                Feature
+                Admin
               </NavLink>
             </li>
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <NavLink
-                to="/"
+                to="/blog"
                 className="hover:text-[#007bff] text-[#333] block font-semibold text-[15px]"
               >
                 Blog
@@ -107,17 +115,28 @@ const NavbarM = () => {
         </div>
 
         <div className="flex items-center ml-auto space-x-6">
-          <button className="font-semibold text-[15px] border-none outline-none">
-            <NavLink to="/login" className="text-[#007bff] hover:underline">
-              Login
-            </NavLink>
-          </button>
-          <button
-            onClick={() => navigate("signup")}
-            className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
-          >
-            Sign up
-          </button>
+          {!auth?.user ? (
+            <button className="font-semibold text-[15px] border-none outline-none">
+              <NavLink to="/login" className="text-[#007bff] hover:underline">
+                Login
+              </NavLink>
+            </button>
+          ) : (
+            <button
+              className="font-semibold text-[15px] border-none outline-none text-[#ff5500] hover:underline"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          )}
+          {!auth?.user ? (
+            <button
+              onClick={() => navigate("signup")}
+              className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
+            >
+              Sign up
+            </button>
+          ) : null}
           {/* hamburger button here... kerja on classname??*/}
           <div
             className="dropdown"

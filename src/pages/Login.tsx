@@ -2,25 +2,85 @@
 import { NavLink } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
-import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { LFormValue } from "../types";
+import AuthService from "../services/AuthService";
+import { useRef, useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import axios from "../api/axios";
+const LOGIN_URL = "/api/token/";
+const USER_URL = "/api/account/user";
 
 //https://www.techiediaries.com/react-password-eye/
-type LFormValue = {
-  username: string;
-  password: string;
-};
+
 export default function Login() {
+  const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const userRef = useRef();
+  const errRef = useRef();
+  const [user, setUser] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  useEffect(() => {
+    //  userRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [user, pwd]);
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LFormValue>();
-  const onSubmit: SubmitHandler<LFormValue> = (data) => {
-    console.log("final data", data);
-    // alert(data.username);
+  const onSubmit: SubmitHandler<LFormValue> = async (data) => {
+    try {
+      const response = await axios.post(LOGIN_URL, JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+
+      const accessToken = response?.data?.access;
+      const refreshToken = response?.data?.refresh;
+      const roles = response?.data?.roles;
+      const user = await getUser(accessToken);
+      setAuth({ user, pwd, roles, accessToken, refreshToken });
+      setUser("");
+      setPwd("");
+      navigate(from, { replace: true });
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+      //  errRef.current?.focus();
+    }
   };
+  async function getUser(aToken: string) {
+    try {
+      const response = await axios.get(USER_URL, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + aToken,
+        },
+        withCredentials: true,
+      });
+
+      const userData = response?.data?.user?.username;
+      return userData;
+    } catch (err) {}
+  }
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

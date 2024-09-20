@@ -6,13 +6,8 @@ import { MdOutlineMail } from "react-icons/md";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 //https://www.techiediaries.com/react-password-eye/
+import { SFormValue } from "../types";
 
-type SFormValue = {
-  username: string;
-  password: string;
-  email: string;
-  cpassword: string;
-};
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showcPassword, setShowcPassword] = useState(false);
