@@ -13,3 +13,14 @@ https://github.com/gitdagray/react_jwt_auth
 David Gray video: https://www.youtube.com/watch?v=nI8PYZNFtac
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sample login:
+username: admin4488
+password: admin4488
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This will check if accessToken expired and if so, will use refresh token to get new access token 
+See hooks folder and Users.tsx page as examples
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
