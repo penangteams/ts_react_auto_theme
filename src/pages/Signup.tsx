@@ -3,14 +3,34 @@ import { NavLink } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
-import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import axios from "../api/axios";
+import { useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
+import { useNavigate, useLocation } from "react-router-dom";
 //https://www.techiediaries.com/react-password-eye/
 import { SFormValue } from "../types";
+const REGISTER_URL = "/api/account/register";
+const USER_URL = "/api/account/user";
+const LOGIN_URL = "/api/token/";
 
 export default function Signup() {
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const [user, setUser] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  useEffect(() => {}, []);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [user, pwd]);
+
   const [showPassword, setShowPassword] = useState(false);
-  const [showcPassword, setShowcPassword] = useState(false);
+  const [showrePassword, setShowrePassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -18,16 +38,65 @@ export default function Signup() {
     watch,
     formState: { errors },
   } = useForm<SFormValue>();
-  const onSubmit: SubmitHandler<SFormValue> = (data) => {
-    delete data.cpassword;
-    console.log("final data", data);
-    // alert(data.username);
+  const onSubmit: SubmitHandler<SFormValue> = async (data) => {
+    // try {
+    const { username, password } = data;
+    const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
+
+    if (response?.status === 201) {
+      autologin({ username, password });
+    }
   };
+  async function getUser(aToken: string) {
+    try {
+      const response = await axios.get(USER_URL, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + aToken,
+        },
+        withCredentials: true,
+      });
+
+      const userData = response?.data?.user?.username;
+      return userData;
+    } catch (err) {}
+  }
+  async function autologin(data: any) {
+    try {
+      const response = await axios.post(LOGIN_URL, JSON.stringify(data), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      console.log("autologin", response);
+      const accessToken = response?.data?.access;
+      const refreshToken = response?.data?.refresh;
+      const roles = response?.data?.roles;
+      const user = await getUser(accessToken);
+      setAuth({ user, pwd, roles, accessToken, refreshToken });
+      setUser("");
+      setPwd("");
+      navigate("/admin");
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+    }
+  }
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  const togglecPasswordVisibility = () => {
-    setShowcPassword(!showcPassword);
+  const togglerePasswordVisibility = () => {
+    setShowrePassword(!showrePassword);
   };
   return (
     <div className="font-[sans-serif]">
@@ -96,6 +165,58 @@ export default function Signup() {
                   </div>
                 </div>
                 <div className="mb-2">
+                  <label className="text-sm mb-2 block">First name</label>
+                  <div className="relative flex items-center">
+                    <input
+                      name="first_name"
+                      type="text"
+                      className="w-4/5 text-sm border border-gray-300 px-4 py-3 rounded-lg outline-blue-600 text-black"
+                      placeholder="Enter user name"
+                      {...register("first_name", {
+                        required: "First name is required",
+                        minLength: {
+                          value: 3,
+                          message: "Username must be at least 3 characters",
+                        },
+                      })}
+                    />
+                    <FaRegUser size={28} className="ml-2" />
+                  </div>
+                  <div className="mt-1">
+                    {errors.username && (
+                      <p className="text-red-500 text-sm">
+                        {errors.username.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="mb-2">
+                  <label className="text-sm mb-2 block">Last name</label>
+                  <div className="relative flex items-center">
+                    <input
+                      name="last_name"
+                      type="text"
+                      className="w-4/5 text-sm border border-gray-300 px-4 py-3 rounded-lg outline-blue-600 text-black"
+                      placeholder="Enter last name"
+                      {...register("last_name", {
+                        required: "Last name is required",
+                        minLength: {
+                          value: 3,
+                          message: "Last name must be at least 3 characters",
+                        },
+                      })}
+                    />
+                    <FaRegUser size={28} className="ml-2" />
+                  </div>
+                  <div className="mt-1">
+                    {errors.username && (
+                      <p className="text-red-500 text-sm">
+                        {errors.username.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="mb-2">
                   <label className="text-sm mb-2 block">Password</label>
                   <div className="relative flex items-center">
                     <input
@@ -132,22 +253,22 @@ export default function Signup() {
                   <label className="text-sm mb-2 block">Confirm password</label>
                   <div className="relative flex items-center">
                     <input
-                      name="cpassword"
-                      type={showcPassword ? "text" : "password"}
+                      name="re_password"
+                      type={showrePassword ? "text" : "password"}
                       autoComplete="current-password"
                       className="w-4/5 text-sm border border-gray-300 px-4 py-3 rounded-lg outline-blue-600 text-black"
                       placeholder="Enter Confirm password"
-                      {...register("cpassword", {
+                      {...register("re_password", {
                         required: "Confirm password is required",
                         validate: () => {
-                          if (watch("cpassword") !== watch("password")) {
+                          if (watch("re_password") !== watch("password")) {
                             return "passwords do no match";
                           }
                         },
                       })}
                     />
-                    <button type="button" onClick={togglecPasswordVisibility}>
-                      {showcPassword ? (
+                    <button type="button" onClick={togglerePasswordVisibility}>
+                      {showrePassword ? (
                         <FaEyeSlash size={26} className="ml-2" />
                       ) : (
                         <FaEye size={20} className="ml-2" />
@@ -159,9 +280,9 @@ export default function Signup() {
                     getValues("cpassword") ? (
                       <p className="text-red-500 text-sm">password not match</p>
                     ) : null} */}
-                    {errors.cpassword && (
+                    {errors.re_password && (
                       <p className="text-red-500 text-sm">
-                        {errors.cpassword.message}
+                        {errors.re_password.message}
                       </p>
                     )}
                   </div>

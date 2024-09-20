@@ -4,10 +4,9 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LFormValue } from "../types";
-import AuthService from "../services/AuthService";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
 const LOGIN_URL = "/api/token/";
 const USER_URL = "/api/account/user";
@@ -21,8 +20,6 @@ export default function Login() {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  const userRef = useRef();
-  const errRef = useRef();
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");

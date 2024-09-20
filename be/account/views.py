@@ -7,6 +7,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
 )
 from rest_framework import viewsets
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 class RegisterView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -35,34 +38,34 @@ class RegisterView(APIView):
 
                         if User.objects.filter(username=username).exists():
                             return Response(
-                                {"success": "Account created successfully"},
+                                {"message": "Account created successfully"},
                                 status=status.HTTP_201_CREATED,
                             )
                         else:
                             return Response(
                                 {
-                                    "error": "Something went wrong when trying to create account"
+                                    "message":  "Something went wrong when trying to create account"
                                 },
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             )
                     else:
                         return Response(
-                            {"error": "Username already exists"},
+                            {"message":  "Username already exists"},
                             status=status.HTTP_400_BAD_REQUEST,
                         )
                 else:
                     return Response(
-                        {"error": "Password must be at least 8 characters in length"},
+                          {"message": "Password must be at least 8 characters in length"},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
             else:
                 return Response(
-                    {"error": "Passwords do not match"},
+                 {"message":  "Passwords do not match"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         except:
             return Response(
-                {"error": "Something went wrong when trying to register account"},
+               {"message":  "Something went wrong when trying to register account"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 

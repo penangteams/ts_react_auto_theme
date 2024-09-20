@@ -16,7 +16,9 @@ export interface SFormValue {
   username: string;
   password: string;
   email: string;
-  cpassword: string;
+  re_password: string;
+  first_name: string;
+  last_name: string;
 }
 
 export interface IUser {
