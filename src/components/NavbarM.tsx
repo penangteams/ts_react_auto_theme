@@ -25,6 +25,9 @@ const NavbarM = () => {
     document.addEventListener("click", handleClick);
     const valued = Cookies.get("myuser");
     setCuser(valued);
+    console.log("nav1", Cookies.get("aToken"));
+    console.log("nav2", Cookies.get("rToken"));
+    console.log("nav3", Cookies.get("myuser"));
     return () => {
       document.removeEventListener("click", handleClick);
     };
