@@ -15,6 +15,7 @@ const NavbarM = () => {
   const drop = React.useRef(null);
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
+  const [c__user, setCuser] = React.useState("");
   function handleClick(e) {
     if (!e.target.closest(`.${drop.current.className}`) && open) {
       setOpen(false);
@@ -23,15 +24,16 @@ const NavbarM = () => {
   React.useEffect(() => {
     document.addEventListener("click", handleClick);
     const valued = Cookies.get("myuser");
-    console.log("I am NAV", valued);
+    setCuser(valued);
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  });
+  }, [c__user]);
   const logout = async () => {
     // if used in more components, this should be in context
     // axios to /logout endpoint
     setAuth({});
+    Cookies.remove("myuser");
     navigate("/");
   };
   return (
@@ -118,7 +120,7 @@ const NavbarM = () => {
         </div>
 
         <div className="flex items-center ml-auto space-x-6">
-          {!auth?.user ? (
+          {!c__user ? (
             <button className="font-semibold text-[15px] border-none outline-none">
               <NavLink to="/login" className="text-[#007bff] hover:underline">
                 Login
