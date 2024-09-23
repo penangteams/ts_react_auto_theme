@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
+import Cookies from "js-cookie";
 const LOGIN_URL = "/api/token/";
 const USER_URL = "/api/account/user";
 
@@ -47,6 +48,15 @@ export default function Login() {
       const refreshToken = response?.data?.refresh;
       const roles = response?.data?.roles;
       const user = await getUser(accessToken);
+      Cookies.set("aToken", accessToken, {
+        secure: true,
+      });
+      Cookies.set("rToken", refreshToken, {
+        secure: true,
+      });
+      Cookies.set("myuser", user, {
+        secure: true,
+      });
       setAuth({ user, pwd, roles, accessToken, refreshToken });
       setUser("");
       setPwd("");
