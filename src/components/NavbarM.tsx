@@ -8,6 +8,7 @@ import ThemeButton from "./ThemeButton";
 // const sampleData = new Array(7).fill("item name");
 const menuItems = ["Contact", "About", "Admin", "Blog"];
 import useAuth from "../hooks/useAuth";
+import Cookies from "js-cookie";
 
 const NavbarM = () => {
   const [open, setOpen] = React.useState(false);
@@ -21,6 +22,8 @@ const NavbarM = () => {
   }
   React.useEffect(() => {
     document.addEventListener("click", handleClick);
+    const valued = Cookies.get("user");
+    console.log("I am NAV", valued);
     return () => {
       document.removeEventListener("click", handleClick);
     };

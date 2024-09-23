@@ -10,6 +10,7 @@ import useAuth from "../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 //https://www.techiediaries.com/react-password-eye/
 import { SFormValue } from "../types";
+import Cookies from "js-cookie";
 const REGISTER_URL = "/api/account/register";
 const USER_URL = "/api/account/user";
 const LOGIN_URL = "/api/token/";
@@ -75,6 +76,15 @@ export default function Signup() {
       const refreshToken = response?.data?.refresh;
       const roles = response?.data?.roles;
       const user = await getUser(accessToken);
+      Cookies.set("aToken", accessToken, {
+        secure: true,
+      });
+      Cookies.set("rToken", refreshToken, {
+        secure: true,
+      });
+      Cookies.set("myuser", user, {
+        secure: true,
+      });
       setAuth({ user, pwd, roles, accessToken, refreshToken });
       setUser("");
       setPwd("");
