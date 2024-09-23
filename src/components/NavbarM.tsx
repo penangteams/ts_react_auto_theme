@@ -120,28 +120,28 @@ const NavbarM = () => {
         </div>
 
         <div className="flex items-center ml-auto space-x-6">
-          {c__user.length <= 0 ? (
-            <button className="font-semibold text-[15px] border-none outline-none">
-              <NavLink to="/login" className="text-[#007bff] hover:underline">
-                Login
-              </NavLink>
-            </button>
-          ) : (
+          {c__user && c__user.length > 0 ? (
             <button
               className="font-semibold text-[15px] border-none outline-none text-[#ff5500] hover:underline"
               onClick={logout}
             >
               Logout
             </button>
+          ) : (
+            <button className="font-semibold text-[15px] border-none outline-none">
+              <NavLink to="/login" className="text-[#007bff] hover:underline">
+                Login
+              </NavLink>
+            </button>
           )}
-          {c__user.length <= 0 ? (
+          {c__user && (
             <button
               onClick={() => navigate("signup")}
               className="px-4 py-2 text-sm rounded-sm font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
             >
               Sign up
             </button>
-          ) : null}
+          )}
           {/* hamburger button here... kerja on classname??*/}
           <div
             className="dropdown"
