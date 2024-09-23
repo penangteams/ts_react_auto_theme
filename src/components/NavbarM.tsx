@@ -22,7 +22,7 @@ const NavbarM = () => {
   }
   React.useEffect(() => {
     document.addEventListener("click", handleClick);
-    const valued = Cookies.get("user");
+    const valued = Cookies.get("myuser");
     console.log("I am NAV", valued);
     return () => {
       document.removeEventListener("click", handleClick);
