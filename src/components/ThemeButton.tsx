@@ -1,4 +1,5 @@
 /** @format */
+import { useEffect } from "react";
 
 const ThemeButton = () => {
   function getTheme() {
@@ -12,7 +13,7 @@ const ThemeButton = () => {
     else return "light";
   }
 
-  window.onload = () => {
+  useEffect(() => {
     const button = document.querySelector("#themeToggle");
     const html = document.querySelector("html");
 
@@ -23,7 +24,7 @@ const ThemeButton = () => {
       html?.setAttribute("data-theme", newTheme);
       window.localStorage.setItem("theme", newTheme);
     });
-  };
+  }, []);
 
   return (
     <button
