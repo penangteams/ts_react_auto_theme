@@ -37,6 +37,8 @@ const NavbarM = () => {
     // axios to /logout endpoint
     setAuth({});
     Cookies.remove("myuser");
+    Cookies.remove("aToken");
+    Cookies.remove("rToken");
     navigate("/");
   };
   return (
