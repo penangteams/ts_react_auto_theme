@@ -6,7 +6,7 @@ import DropDownCard from "./dropDownCard";
 import { NavLink, useNavigate } from "react-router-dom";
 import ThemeButton from "./ThemeButton";
 // const sampleData = new Array(7).fill("item name");
-const menuItems = ["Contact", "About"];
+const menuItems = ["Contact", "About", "Admin", "Blog"];
 import useAuth from "../hooks/useAuth";
 
 const NavbarM = () => {
