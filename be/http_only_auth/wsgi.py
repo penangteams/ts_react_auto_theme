@@ -1,16 +1,14 @@
-"""
-WSGI config for http_only_auth project.
+import os,sys
+import runpy
 
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
-"""
-
-import os
+runpy.run_path("/var/www/ts_react_auto_theme/be/venv/bin/activate_this.py")
+sys.path.append('/var/www/ts_react_auto_theme/be')
+sys.path.append('/var/www/ts_react_auto_theme/be/http_only_auth')
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'http_only_auth.settings')
+os.environ['HTTPS'] = "on"
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'http_only_auth.settings')
 application = get_wsgi_application()
+

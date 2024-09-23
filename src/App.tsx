@@ -1,18 +1,18 @@
 /** @format */
 
-import About from "@/pages/About";
-import Blog from "@/pages/Blog";
-import Contact from "@/pages/Contact";
-import Login from "@/pages/Login";
-import Signup from "@/pages/Signup";
-import Home from "@/pages/Home";
-import Missing from "@/pages/Missing";
-import Admin from "@/pages/Admin";
+import About from "./pages/About";
+import Blog from "./pages/Blog";
+import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Home from "./pages/Home";
+import Missing from "./pages/Missing";
+import Admin from "./pages/Admin";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import RequireAuth from "@/pages/RequireAuth";
+import RequireAuth from "./pages/RequireAuth";
 import { AuthProvider } from "./context/AuthProvider";
-import Layout from "@/components/Layout";
-import Unauthorized from "@/pages/Unauthorized";
+import Layout from "./components/Layout";
+import Unauthorized from "./pages/Unauthorized";
 
 function App() {
   return (

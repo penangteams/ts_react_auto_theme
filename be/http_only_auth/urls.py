@@ -1,5 +1,7 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -14,4 +16,5 @@ urlpatterns = [
         "api/account/", include("account.urls")
     ),  # api/account/user & api/account/register
     path("admin/", admin.site.urls),
-]
+
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

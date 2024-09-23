@@ -1,0 +1,11 @@
+{
+    apps : [
+      {
+        name      : "vite_dj_reat_types",
+        script    : "npx",
+        interpreter: "none",
+        args: "serve -s dist -p 3003"
+      }
+    ]
+  }
+  

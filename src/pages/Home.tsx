@@ -1,6 +1,6 @@
 /** @format */
-import Card from "@/components/Card";
-import { CardProps } from "@/types";
+import Card from "../components/Card";
+import { CardProps } from "../types";
 import image1 from "@/assets/images/image-1.png";
 import image2 from "@/assets/images/image-2.png";
 import image3 from "@/assets/images/image-3.png";
